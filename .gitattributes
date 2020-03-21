@@ -1,0 +1,9 @@
+*.jpg binary
+*.png binary
+*.pdf binary
+*.woff binary
+
+
+
+# Declare files that will always have CRLF line endings on checkout.
+* text eol=lf

@@ -1,0 +1,23 @@
+#!/usr/bin/php
+<?php
+/**
+ * phore/tester executable
+ *
+ * run ptest -h for help
+ *
+ * User: matthias
+ * Date: 11.03.20
+ * Time: 12:23
+ */
+
+namespace OticTools;
+
+use Phore\Tester\PTestCli;
+
+if (file_exists(__DIR__ . "/../vendor/autoload.php")) {
+    require __DIR__ . "/../vendor/autoload.php";
+} else {
+    require __DIR__ . "/../../../autoload.php";
+}
+
+PTestCli::main($argv, $argc);
