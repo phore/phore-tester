@@ -37,12 +37,13 @@ class PTestCli
                     echo "\n";
                     exit (1);
                 }
-                phore_out("PASS");
+                phore_out("PASS\n");
 
             }
+           
 
         }
-
+        phore_out("ALL TESTS PASSED\n");
 
     }
 }
