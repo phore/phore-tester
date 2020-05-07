@@ -11,8 +11,8 @@
   "require": {
     "php": ">=7.2",
     "ext-json": "*",
-    "phore/core": "dev-master",
-    "phore/filesystem": "dev-master"
+    "phore/core": "*",
+    "phore/filesystem": "*"
   },
   "autoload": {
     "psr-4": {
