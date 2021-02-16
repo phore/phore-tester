@@ -11,7 +11,7 @@ class PTestCli
     public static function main($argv, $argc) {
 
 
-        foreach (phore_dir(posix_getcwd() . "/test")->genWalk("*Test.php") as $curFile) {
+        foreach (phore_dir(posix_getcwd() . "/test")->genWalk("*Test.php", true) as $curFile) {
             $class = $curFile->getFilename();
 
 
