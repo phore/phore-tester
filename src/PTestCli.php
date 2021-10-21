@@ -61,7 +61,6 @@ class PTestCli
             phore_out("PASS\n");
         }
 
-
     }
 
     
