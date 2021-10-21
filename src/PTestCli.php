@@ -39,12 +39,14 @@ class PTestCli
                                 throw new \InvalidArgumentException("Invalid Attribute " . get_debug_type($tester). " in $mName");
                             $tester->test($obj, $mName);
                         }
+                        echo (" [OK]\n");
                         continue;
                     }
                 }
 
                 phore_out("+ $mName");
                 $obj->$mName();
+                echo ("[OK]\n");
             } catch (\Exception $e) {
                 phore_out("!!! Exception: " . $e->getMessage());
                 echo "\n\nThrown in: {$e->getFile()}:{$e->getLine()}";
@@ -58,7 +60,7 @@ class PTestCli
                 echo "\n";
                 exit (1);
             }
-            phore_out("PASS\n");
+
         }
 
     }

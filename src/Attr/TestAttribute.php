@@ -7,5 +7,5 @@ namespace Phore\Tester\Attr;
 interface TestAttribute
 {
 
-    public function test($testObject, $methodName);
+    public function test(object $testObject, string $methodName);
 }

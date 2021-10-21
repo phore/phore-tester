@@ -12,8 +12,17 @@ class ApplyFixture implements TestAttribute
 
     public function test(object $object, string $methodName)
     {
-        $filesIn 
-        phore_out("")
+        $filesIn = glob($this->path . "/*");
+        $tests = [];
+        foreach ($filesIn as $fileIn) {
+            if (preg_match("/([a-zA-Z0-9\/_\-]+)\.[a-zA-Z0-9\.]+$/", $fileIn, $matches))
+                $tests[$matches[1]] = true;
+        }
+        foreach ($tests as $test => $val) {
+            phore_out(" + $methodName('$test')");
+            $object->$methodName($test);
+        }
+
     }
     
 }
