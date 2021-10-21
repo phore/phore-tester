@@ -21,6 +21,7 @@ class ApplyFixture implements TestAttribute
         foreach ($tests as $test => $val) {
             phore_out(" + $methodName('$test')");
             $object->$methodName($test);
+            echo "\033[32m [OK]\033[0m";
         }
 
     }

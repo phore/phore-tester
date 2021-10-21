@@ -17,16 +17,21 @@ class AssertionFailedException extends \Exception
         $this->expected = $expected;
         $this->actual = $actual;
 
-        if (is_array($expected) || is_array($actual) || ( (is_string($actual) || is_string($expected)) && (strlen($expected) > 50 || strlen($actual) > 50) )) {
-            file_put_contents("/tmp/expected.out", print_r ($expected, true));
+        if (is_array($expected) || is_array($actual) || ( (is_string($actual) || is_string($expected)) && (strlen($expected) > 2000 || strlen($actual) > 2000) )) {
+            file_put_contents("/tmp/expected.out", print_r($expected, true));
             file_put_contents("/tmp/actual.out", print_r($actual, true));
             $msg = "Expected (/tmp/expeced.out) not equals acutal (/tmp/actual.out).";
-
+        } else if (is_string($expected) && is_string($actual) && strlen($expected) > 25 && strlen($actual) > 25 || strpos($expected, "\n") !== false || strpos($actual, "\n") !== false ) {
+            $msg = "<<<<<<<<< EXPECTED <<<<<<<<<\n";
+            $msg .= $expected . "\n";
+            $msg .= ">>>>>>>> ACTUAL   >>>>>>>>>\n";
+            $msg .= $actual . "\n";
+            $msg .= "===========================";
         } else {
             $msg = "Expected '$expected' != '$actual'";
         }
 
-        parent::__construct($message . " $msg", $code, $previous);
+        parent::__construct( "$msg", $code, $previous);
     }
 
 

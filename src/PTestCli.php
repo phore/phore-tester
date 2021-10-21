@@ -6,6 +6,7 @@ namespace Phore\Tester;
 
 use Phore\FileSystem\PhoreFile;
 use Phore\Tester\Attr\TestAttribute;
+use Phore\Tester\Ex\AssertionFailedException;
 
 class PTestCli
 {
@@ -32,43 +33,51 @@ class PTestCli
 
                 if (method_exists($methodRef, "getAttributes")) {
                     $attributes = $methodRef->getAttributes();
-                    if (count ($attributes) > 0) {
+                    if (count($attributes) > 0) {
                         foreach ($attributes as $attribute) {
                             $tester = $attribute->newInstance();
-                            if ( ! $tester instanceof TestAttribute)
-                                throw new \InvalidArgumentException("Invalid Attribute " . get_debug_type($tester). " in $mName");
+                            if (!$tester instanceof TestAttribute)
+                                throw new \InvalidArgumentException("Invalid Attribute " . get_debug_type($tester) . " in $mName");
                             $tester->test($obj, $mName);
                         }
-                        echo (" [OK]\n");
+                        
                         continue;
                     }
                 }
 
                 phore_out("+ $mName");
                 $obj->$mName();
-                echo ("[OK]\n");
+                echo "\033[32m [OK]\033[0m";
+            } catch (AssertionFailedException $e) {
+
+                echo "\033[31m [FAIL]\033[0m";
+                echo "\n\n" . $e->getMessage();
+                phore_out("!!! Assertion failed in file {$e->getTrace()[0]["file"]} Line: {$e->getTrace()[0]["line"]}''\n");
+                exit(2);
             } catch (\Exception $e) {
+                echo "\033[31m [FAIL]\033[0m";
                 phore_out("!!! Exception: " . $e->getMessage());
                 echo "\n\nThrown in: {$e->getFile()}:{$e->getLine()}";
                 echo "\n" . $e->getTraceAsString();
                 echo "\n";
                 exit (1);
             } catch (\Error $e) {
+                echo "\033[31m [FAIL]\033[0m";
                 phore_out("!!! Error: " . $e->getMessage());
                 echo "\n\nThrown in: {$e->getFile()}:{$e->getLine()}";
                 echo "\n" . $e->getTraceAsString();
                 echo "\n";
                 exit (1);
             }
-
         }
-
+        echo "\n";
     }
 
     
     public function main($argv, $argc) {
         if ($argv[1] !== null) {
             $this->runTestFromFile(phore_file($argv[1]));
+            phore_out("TESTS PASSED\n");
             return;
         }
 
