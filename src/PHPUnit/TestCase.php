@@ -18,7 +18,7 @@ class TestCase
     public function assertEquals($expected, $actual) 
     {
         if ($expected !== $actual)
-            throw new AssertionFailedException("Equals", $expected, $actual);
+            throw new AssertionFailedException("Equals", $expected, $actual, "assertEquals");
         return true;
     }
 
