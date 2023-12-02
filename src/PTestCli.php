@@ -75,7 +75,7 @@ class PTestCli
 
     
     public function main($argv, $argc) {
-        if ($argv[1] !== null) {
+        if ($argv[1] ?? null !== null) {
             $this->runTestFromFile(phore_file($argv[1]));
             phore_out("TESTS PASSED\n");
             return;
