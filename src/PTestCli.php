@@ -27,8 +27,13 @@ class PTestCli
             $expectedException = $object->__getExpectedException();
             if ($expectedException === null)
                 throw $e;
-            if ( ! $e instanceof $expectedException)
-                throw new AssertionFailedException("Expected Exception", $expectedException, $e, "expectException");
+            if (isset($expectedException["class"]))
+                if ( ! $e instanceof $expectedException["class"])
+                    throw new AssertionFailedException("Expected Exception", $expectedException, $e, "expectException");
+            if (isset($expectedException["message"]))
+                if ( ! str_contains($e->getMessage(), $expectedException["message"]))
+                    throw new AssertionFailedException("Expected Exception Message", $expectedException["message"], $e->getMessage(), "expectExceptionMessage");
+
         }
         $object->expectException(null); // Reset the expected exception
     }

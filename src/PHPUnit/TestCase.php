@@ -41,8 +41,27 @@ class TestCase
 
     public function expectException($exceptionClass)
     {
-        $this->expectedException = $exceptionClass;
+        if ( ! is_array($this->expectedException))
+            $this->expectedException = [];
+        $this->expectedException["class"] = $exceptionClass;
     }
+
+    public function expectExceptionMessage($message)
+    {
+        if ( ! is_array($this->expectedException))
+            $this->expectedException = [];
+        $this->expectedException["message"] = $message;
+    }
+
+    public function expectExceptionMessageRegExp($message)
+    {
+        if ( ! is_array($this->expectedException))
+            $this->expectedException = [];
+        $this->expectedException["message"] = $message;
+        $this->expectedException["regexp"] = true;
+    }
+
+
 
     public function __getExpectedException()
     {
