@@ -10,7 +10,29 @@ use Phore\Tester\Ex\AssertionFailedException;
 
 class PTestCli
 {
-    
+
+
+    protected function runSingleTest($object, $method)
+    {
+        if ( ! $object instanceof \PHPUnit\Framework\TestCase)
+            throw new \InvalidArgumentException("Object must be instance of PHPUnit\Framework\TestCase");
+
+
+        try {
+            $object->$method();
+            $expectedException = $object->__getExpectedException();
+            if ($expectedException !== null)
+                throw new AssertionFailedException("Expected Exception", $expectedException, null, "expectException");
+        } catch (\Exception|\Error $e) {
+            $expectedException = $object->__getExpectedException();
+            if ($expectedException === null)
+                throw $e;
+            if ( ! $e instanceof $expectedException)
+                throw new AssertionFailedException("Expected Exception", $expectedException, $e, "expectException");
+        }
+        $object->expectException(null); // Reset the expected exception
+    }
+
 
     protected function runTestFromFile(PhoreFile $file)
     {
@@ -40,13 +62,17 @@ class PTestCli
                                 throw new \InvalidArgumentException("Invalid Attribute " . get_debug_type($tester) . " in $mName");
                             $tester->test($obj, $mName);
                         }
-                        
+
                         continue;
                     }
                 }
 
                 phore_out("+ $mName");
-                $obj->$mName();
+
+
+                $this->runSingleTest($obj, $mName);
+
+
                 echo "\033[32m [OK]\033[0m";
             } catch (AssertionFailedException $e) {
 
@@ -73,7 +99,7 @@ class PTestCli
         echo "\n";
     }
 
-    
+
     public function main($argv, $argc) {
         if ($argv[1] ?? null !== null) {
             $this->runTestFromFile(phore_file($argv[1]));

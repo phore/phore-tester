@@ -23,6 +23,13 @@ class TestCase
     }
 
 
+    public function assertNotEmpty($actual)
+    {
+        if (empty($actual))
+            throw new AssertionFailedException("NotEmpty", "not empty", "empty", "assertNotEmpty");
+        return true;
+    }
+
     public function assertInstanceOf($expected, $actual)
     {
         if ( ! $actual instanceof $expected)
@@ -30,9 +37,17 @@ class TestCase
         return true;
     }
 
+    private $expectedException = null;
+
     public function expectException($exceptionClass)
     {
-
+        $this->expectedException = $exceptionClass;
     }
+
+    public function __getExpectedException()
+    {
+        return $this->expectedException;
+    }
+
 
 }
