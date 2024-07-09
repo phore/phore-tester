@@ -29,12 +29,12 @@ class TestCase
             throw new AssertionFailedException("NotEmpty", "not empty", "empty", "assertNotEmpty");
         return true;
     }
-    
+
     public function assertStringStartsWith(string $expected, $actual)
     {
         if ( ! is_string($actual))
             throw new AssertionFailedException("StringStartsWith", $expected, phore_debug_type($actual), "assertStringStartsWith");
-            
+
         if (substr($actual, 0, strlen($expected)) !== $expected)
             throw new AssertionFailedException("StringStartsWith", $expected, $actual, "assertStringStartsWith");
         return true;
@@ -49,8 +49,12 @@ class TestCase
 
     private $expectedException = null;
 
-    public function expectException($exceptionClass)
+    public function expectException(string|null $exceptionClass)
     {
+        if ($exceptionClass === null) {
+            $this->expectedException = null;
+            return;
+        }
         if ( ! is_array($this->expectedException))
             $this->expectedException = [];
         $this->expectedException["class"] = $exceptionClass;

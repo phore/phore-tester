@@ -23,6 +23,8 @@ class PTestCli
             $expectedException = $object->__getExpectedException();
             if ($expectedException !== null)
                 throw new AssertionFailedException("Expected Exception", $expectedException, null, "expectException");
+        } catch(AssertionFailedException $e) {
+            throw $e;
         } catch (\Exception|\Error $e) {
             $expectedException = $object->__getExpectedException();
             if ($expectedException === null)
