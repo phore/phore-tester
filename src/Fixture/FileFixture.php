@@ -6,6 +6,8 @@ class FileFixture
 {
     public readonly string $basePath;
 
+    private bool $cleanBasePath = true;
+    
     public function __construct(string $basePath, public readonly ?string $sampleDir = null)
     {
         $this->basePath = rtrim($basePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -47,20 +49,20 @@ class FileFixture
 
     private function deleteDirectory(string $dirPath): self
     {
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dirPath, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($files as $fileInfo) {
-            $filePath = $fileInfo->getRealPath();
-            if ($fileInfo->isDir()) {
-                rmdir($filePath);
-            } else {
-                unlink($filePath);
+        $files = opendir($dirPath);
+        while (($file = readdir($files)) !== false) {
+            if ($file !== '.' && $file !== '..') {
+                $fullPath = $dirPath . DIRECTORY_SEPARATOR . $file;
+                if (is_dir($fullPath)) {
+                    $this->deleteDirectory($fullPath);
+                } else {
+                    if ( !unlink($fullPath))
+                        throw new \InvalidArgumentException("Cannot delete file '$fullPath'");
+                }
             }
         }
-        rmdir($dirPath);
+        if ( ! rmdir($dirPath))
+            throw new \InvalidArgumentException("Cannot delete directory '$dirPath'");
         return $this;
     }
 
