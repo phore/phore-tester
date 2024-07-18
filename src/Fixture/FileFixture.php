@@ -4,7 +4,7 @@ namespace Phore\Tester\Fixture;
 
 class FileFixture
 {
-    private string $basePath;
+    public readonly string $basePath;
 
     public function __construct(string $basePath, public readonly ?string $sampleDir = null)
     {
@@ -34,7 +34,7 @@ class FileFixture
         return $fullPath;
     }
 
-    public function deletePath(string $relativePath): void
+    public function deletePath(string $relativePath): self
     {
         $fullPath = $this->basePath . $relativePath;
         if (is_dir($fullPath)) {
@@ -42,9 +42,10 @@ class FileFixture
         } elseif (is_file($fullPath)) {
             unlink($fullPath);
         }
+        return $this;
     }
 
-    private function deleteDirectory(string $dirPath): void
+    private function deleteDirectory(string $dirPath): self
     {
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dirPath, \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -60,13 +61,15 @@ class FileFixture
             }
         }
         rmdir($dirPath);
+        return $this;
     }
 
-    public function copyFromSampleDir(string $sampleDir = null): void
+    public function copyFromSampleDir(string $sampleDir = null): self
     {
         if (! $sampleDir)
             $sampleDir = $this->sampleDir;
         $this->recursiveCopy($sampleDir, $this->basePath);
+        return $this;
     }
 
     private function recursiveCopy(string $source, string $dest): void
@@ -87,11 +90,12 @@ class FileFixture
         closedir($dir);
     }
 
-    public function clean(bool $copyFromSampleDir = true): void
+    public function clean(bool $copyFromSampleDir = true): self
     {
         $this->deleteDirectory($this->basePath);
         mkdir($this->basePath, 0777, true);
         if ($this->sampleDir && $copyFromSampleDir)
             $this->copyFromSampleDir($this->sampleDir);
+        return $this;
     }
 }
