@@ -89,7 +89,10 @@ class PTestCli
                 exit(2);
             } catch (\Exception $e) {
                 echo "\033[31m [FAIL]\033[0m";
+
                 phore_out("!!! Exception: " . $e->getMessage());
+                if ($e instanceof \Stringable)
+                    echo "\n" . $e;
                 echo "\n\nThrown in: {$e->getFile()}:{$e->getLine()}";
                 echo "\n" . $e->getTraceAsString();
                 echo "\n";
@@ -97,6 +100,8 @@ class PTestCli
             } catch (\Error $e) {
                 echo "\033[31m [FAIL]\033[0m";
                 phore_out("!!! Error: " . $e->getMessage());
+                if ($e instanceof \Stringable)
+                    echo "\n" . $e;
                 echo "\n\nThrown in: {$e->getFile()}:{$e->getLine()}";
                 echo "\n" . $e->getTraceAsString();
                 echo "\n";
