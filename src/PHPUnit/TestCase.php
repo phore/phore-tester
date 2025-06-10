@@ -76,6 +76,20 @@ class TestCase
     }
 
 
+    public function assertTrue($condition)
+    {
+        if ($condition !== true)
+            throw new AssertionFailedException("True", "true", $condition, "assertTrue");
+        return true;
+    }
+    
+    public function assertFalse($condition)
+    {
+        if ($condition !== false)
+            throw new AssertionFailedException("False", "false", $condition, "assertFalse");
+        return true;
+    }
+    
 
     public function __getExpectedException()
     {
