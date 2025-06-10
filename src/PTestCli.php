@@ -22,7 +22,7 @@ class PTestCli
             $object->$method();
             $expectedException = $object->__getExpectedException();
             if ($expectedException !== null)
-                throw new AssertionFailedException("Expected Exception", $expectedException, null, "expectException");
+                throw new AssertionFailedException("Expected Exception", $expectedException, "<no exception>", "expectException");
         } catch(AssertionFailedException $e) {
             throw $e;
         } catch (\Exception|\Error $e) {
